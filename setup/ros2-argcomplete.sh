@@ -1,0 +1,1 @@
+source /opt/ros/humble/share/ros2cli/environment/ros2-argcomplete.bash
