@@ -121,12 +121,27 @@ cs() {
     fi
 }
 
+# ros2 CLI argcomplete
+source /opt/ros/${ROS_DISTRO}/share/ros2cli/environment/ros2-argcomplete.${SETUP_EXT}
+
 # ci — source the workspace overlay
 ci() {
     local setup="\${DEFAULT_ROS_WS}/install/setup.${SETUP_EXT}"
     if [ -f "\$setup" ]; then
         # shellcheck disable=SC1090
         source "\$setup" && echo "✓ Sourced overlay: \$DEFAULT_ROS_WS"
+    else
+        echo "Overlay not found: \$setup"
+        echo "  Have you built the workspace? (colcon build)"
+    fi
+}
+
+# so — source the current directory's workspace overlay
+so() {
+    local setup="install/setup.sh"
+    if [ -f "\$setup" ]; then
+        # shellcheck disable=SC1090
+        source "\$setup" && echo "✓ Sourced overlay: \$(pwd)"
     else
         echo "Overlay not found: \$setup"
         echo "  Have you built the workspace? (colcon build)"
@@ -141,6 +156,7 @@ echo ""
 echo -e "  ${BOLD}cw${RESET}  — cd to \$DEFAULT_ROS_WS"
 echo -e "  ${BOLD}cs${RESET}  — source /opt/ros/${ROS_DISTRO}/setup.${SETUP_EXT}"
 echo -e "  ${BOLD}ci${RESET}  — source \$DEFAULT_ROS_WS/install/setup.${SETUP_EXT}"
+echo -e "  ${BOLD}so${RESET}  — source ./install/setup.sh (current directory)"
 echo ""
 echo -e "  To change workspace later:"
 echo -e "  ${CYAN}./ros2_setup.sh --change-ws ~/ws/robotics/isaac${RESET}"
